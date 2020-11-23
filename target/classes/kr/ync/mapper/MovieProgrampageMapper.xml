@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ync.mapper.MovieProgrampageMapper">
+	
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item='type' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	<select id="getList_index" resultType="kr.ync.domain.MovieProgrampageVO">
+	<![CDATA[
+		select * from programpage where div_num = 1
+		]]>
+	</select>
+	
+	<select id="getList_tvshow" resultType="kr.ync.domain.MovieProgrampageVO">
+	<![CDATA[
+		select * from programpage where div_num = 2
+		]]>
+	</select>
+	
+	<insert id="insert">
+		insert into programpage (prog_num, title, poster, year, rate, content, country, genre, div_num, video)
+		values (seq_prog_num.nextval, #{title}, #{poster}, #{year}, #{rate}, #{content}, #{country}, #{genre}, #{div_num}, #{video})
+	</insert>
+	
+	<insert id="insertSelectKey">
+
+		<selectKey keyProperty="bno" order="BEFORE"
+			resultType="Long">
+			select seq_board.nextval from dual
+		</selectKey>
+
+		insert into tbl_board (bno,title,content, writer, file_1, file_2, file_3)
+		values (#{bno},
+		#{title}, #{content}, #{writer}, #{file_1}, #{file_2}, #{file_3})
+	</insert>
+	
+	<select id="read" resultType="kr.ync.domain.MovieProgrampageVO">
+		select * from programpage where prog_num =	#{prog_num}
+	</select>
+
+
+	<delete id="delete">
+		delete programpage where prog_num = #{prog_num}
+	</delete>
+ 
+	<update id="update">
+		update programpage
+		set title= #{title},
+			poster=#{poster},
+			year = #{year},
+			rate = #{rate},
+			content = #{content},
+			country = #{country},
+			genre = #{genre},
+			div_num = #{div_num},
+			video = #{video}
+			
+		where prog_num = #{prog_num}
+	</update>
+	
+	<!-- <select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
+		<![CDATA[
+  		SELECT	bno,
+  				title,
+  				content,
+  				writer,
+  				regdate,
+  				updatedate
+		FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
+						rownum rn,
+						bno,
+						title,
+						content,
+						writer,
+						regdate,
+						updatedate
+				FROM	tbl_board
+				WHERE	rownum <= 20 
+				)
+		WHERE rn > 10   
+		]]>
+	</select> -->
+	<!-- 
+	<select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
+		<![CDATA[
+  		SELECT	bno,
+  				title,
+  				content,
+  				writer,
+  				regdate,
+  				updatedate
+		FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
+						rownum rn,
+						bno,
+						title,
+						content,
+						writer,
+						regdate,
+						updatedate
+				FROM	tbl_board
+				WHERE	rownum <= #{pageNum} * #{amount}
+				)
+		WHERE rn > (#{pageNum} -1) * #{amount}
+		]]>
+	</select>
+	 -->
+	<!-- 
+	<select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
+		<![CDATA[
+			SELECT	bno,
+					title,
+					content,
+					writer,
+					regdate,
+					updatedate
+			FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
+        					rownum rn,
+        					bno,
+        					title,
+        					content,
+        					writer,
+        					regdate,
+        					updatedate 
+					FROM	tbl_board
+					WHERE
+		]]>	
+					<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+						<foreach item='type' collection="typeArr">
+							<trim prefix="OR">
+								<choose>
+									<when test="type == 'T'.toString()">
+										title like '%'||#{keyword}||'%'
+									</when>
+									<when test="type == 'C'.toString()">
+										content like '%'||#{keyword}||'%'
+									</when>
+									<when test="type == 'W'.toString()">
+										writer like '%'||#{keyword}||'%'
+									</when>
+								</choose>
+							</trim>
+						</foreach>
+					</trim>
+		<![CDATA[
+					rownum <= #{pageNum} * #{amount}
+      				)
+			WHERE rn > (#{pageNum} -1) * #{amount}   
+  		]]>
+	</select>
+	 -->
+	
+	<!-- <select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
+		<![CDATA[
+		SELECT	bno,
+				title,
+				content,
+				writer,
+				regdate,
+				updatedate
+		FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
+        				rownum rn,
+        				bno,
+        				title,
+        				content,
+        				writer,
+        				regdate,
+        				updatedate 
+      			FROM	tbl_board
+				WHERE 
+  		]]>
+  		
+		<include refid="criteria"></include> 
+      
+		<![CDATA[    
+      			rownum <= #{pageNum} * #{amount}
+      			)
+  		WHERE rn > (#{pageNum} -1) * #{amount}   
+		]]>
+	</select> -->
+	
+	<select id="getListWithPaging_index" resultType="kr.ync.domain.MovieProgrampageVO">
+		<![CDATA[
+		SELECT	title,
+				year,
+				rate,
+				content,
+				country,
+				genre,
+				div_num,
+				prog_num,
+				poster,
+				video,
+				prog_like
+		FROM	(SELECT /*+INDEX_DESC(programpage seq_prog_num) */
+        				rownum rn,
+        				title,
+						year,
+						rate,
+						content,
+						country,
+						genre,
+						div_num,
+						prog_num,
+						poster,
+						video,
+						prog_like
+      			FROM	programpage
+				WHERE 
+  		]]>
+		<include refid="criteria"></include> 
+      
+		<![CDATA[    
+      			rownum <= #{pageNum} * #{amount}
+      			)
+  		WHERE rn > (#{pageNum} -1) * #{amount}
+  		AND   div_num = 1   
+		]]>
+	</select>
+	
+	<select id="getListWithPaging_tvshow" resultType="kr.ync.domain.MovieProgrampageVO">
+		<![CDATA[
+		SELECT	title,
+				year,
+				rate,
+				content,
+				country,
+				genre,
+				div_num,
+				prog_num,
+				poster,
+				video,
+				prog_like
+		FROM	(SELECT /*+INDEX_DESC(programpage seq_prog_num) */
+        				rownum rn,
+        				title,
+						year,
+						rate,
+						content,
+						country,
+						genre,
+						div_num,
+						prog_num,
+						poster,
+						video,
+						prog_like
+      			FROM	programpage
+				WHERE 
+  		]]>
+		<include refid="criteria"></include> 
+      
+		<![CDATA[    
+      			rownum <= #{pageNum} * #{amount}
+      			)
+  		WHERE rn > (#{pageNum} -1) * #{amount}
+  		AND	  div_num = 2   
+		]]>
+	</select>
+	
+	<!-- 
+	<select id="getTotalCount" resultType="int">
+		<![CDATA[
+		select count(*) from tbl_board where 
+		bno > 0
+		]]>
+	</select>
+	 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*) from programpage where 
+		
+		<include refid="criteria"></include>
+		
+		<![CDATA[
+		prog_num > 0
+		AND div_num = 1
+		]]>
+	</select>
+	
+	<select id="getTotalCount2" resultType="int">
+		select count(*) from programpage where 
+		
+		<include refid="criteria"></include>
+		
+		<![CDATA[
+		prog_num > 0 
+		AND div_num = 2
+		]]>
+	</select>
+	
+	<update id="updateReplyCnt">
+		UPDATE tbl_board SET replycnt = replycnt + #{amount} WHERE bno = #{bno}
+	</update> 
+</mapper>
