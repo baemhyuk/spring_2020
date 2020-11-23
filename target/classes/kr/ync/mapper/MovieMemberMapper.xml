@@ -7,14 +7,14 @@
 		<result property="user_id" column="user_id"/>
 		<result property="user_pwd" column="user_pwd"/>
 		<result property="user_name" column="user_name"/>
-		<result property="regDate" column="regdate"/>
-		<result property="updateDate" column="updatedate"/>
+		<result property="phone_num" column="phone_num"/>
+		<result property="user_level" column="user_level"/>
 		<collection property="authList" resultMap="authMap">
 		</collection>
 	</resultMap>
 	
 	<resultMap type="kr.ync.domain.AuthVO" id="authMap">
-		<result property="userid" column="userid"/>
+		<result property="user_id" column="user_id"/>
 		<result property="auth" column="auth"/>
 	</resultMap>
 	
