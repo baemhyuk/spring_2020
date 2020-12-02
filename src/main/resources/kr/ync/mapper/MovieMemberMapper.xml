@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.ync.mapper.MovieMemberMapper">
 	
-	<resultMap type="kr.ync.domain.MovieMemberVO" id="memberMap">
+  	<resultMap type="kr.ync.domain.MovieMemberVO" id="memberMap">
 		<id property="user_id" column="user_id"/>
 		<result property="user_id" column="user_id"/>
 		<result property="user_pwd" column="user_pwd"/>
 		<result property="user_name" column="user_name"/>
 		<result property="phone_num" column="phone_num"/>
 		<result property="user_level" column="user_level"/>
-		<collection property="authList" resultMap="authMap">
+		<collection property="auth" resultMap="authMap">
 		</collection>
 	</resultMap>
 	
@@ -17,6 +17,17 @@
 		<result property="user_id" column="user_id"/>
 		<result property="auth" column="auth"/>
 	</resultMap>
+	
+	<select id="read" resultMap="memberMap">
+	SELECT	user_id,
+			user_pwd,
+			user_name,
+			phone_num,
+			user_level,
+			auth
+	FROM	members
+	WHERE	user_id = #{user_id} 
+	</select>
 	
 	<sql id="criteria">
 		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
@@ -61,9 +72,6 @@
 		#{title}, #{content}, #{writer}, #{file_1}, #{file_2}, #{file_3})
 	</insert>
 	
-	<select id="read" resultType="kr.ync.domain.MovieMemberVO">
-		select * from member where user_id = #{user_id}
-	</select>
 
 
 	<delete id="delete">

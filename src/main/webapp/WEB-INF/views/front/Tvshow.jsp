@@ -1,36 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
-
 <%@include file="../includes/front_header.jsp"%>
 
-<body>
-
-    <!--     start Header Section   -->
-    <nav id="tm-header" class="uk-navbar ">
-        <div class="uk-container uk-container-center ">
-            <a class="uk-navbar-brand uk-hidden-small" href="/">
-            <i class="uk-icon-small uk-text-primary uk-margin-small-right uk-icon-play-circle"></i> WEBFLIX</a>
-
-
-            <div class="uk-navbar-flip uk-hidden-small">
-                <div class="uk-button-group">
-                    <a class="uk-button uk-button-link uk-button-large" href="/front/signup">Sign up</a>
-                    <a class="uk-button uk-button-success uk-button-large uk-margin-left" href="/front/login">
-                    	<i class="uk-icon-lock uk-margin-small-right"></i> Log in
-                    </a>
-                </div>
-            </div>
-            <a href="#offcanvas" class="uk-navbar-toggle uk-visible-small uk-icon-medium" data-uk-offcanvas></a>
-            <div class="uk-navbar-flip uk-visible-small">
-                <a href="#offcanvas" class="uk-navbar-toggle uk-navbar-toggle-alt uk-icon-medium" data-uk-offcanvas></a>
-            </div>
-            <div class="uk-navbar-brand uk-navbar-center uk-visible-small"><i
-                    class="uk-icon-small uk-text-primary uk-margin-small-right uk-icon-play-circle"></i> Webflix</div>
-        </div>
-    </nav>
     <nav class="uk-navbar uk-navbar-secondary  uk-hidden-small">
         <div class="uk-container-center uk-container">
             <ul class="uk-navbar-nav">
@@ -60,18 +31,18 @@
                 <div class="uk-grid-width-small-1-3 uk-grid-width-medium-1-4 uk-grid-width-large-1-6"
                     data-uk-grid="{gutter: 20}">
                    
-                   	<c:forEach items="${tv}" var="movie_program">					
+                   	<c:forEach items="${tv}" var="tv_program">					
 					<div>
                         <div class="uk-overlay uk-overlay-hover">
-                            <img src="<c:out value="${movie_program.poster}" />" alt="Image">
+                            <img src="<c:out value="${tv_program.poster}" />" alt="Image">
                             <div class="uk-overlay-panel uk-overlay-fade uk-overlay-background  uk-overlay-icon"></div>
-                            <a class="uk-position-cover" href="/front/media"></a>
+                            <a class="uk-position-cover move" href='<c:out value="${tv_program.prog_num}"/>'></a>
                         </div>
                         
                         
                         <div class="uk-panel">
 
-                            <h5 class="uk-panel-title"><c:out value="${movie_program.title}" /></h5>
+                            <h5 class="uk-panel-title"><c:out value="${tv_program.title}" /></h5>
                             <p>
                             <span class="rating">
                                     <i class="uk-icon-star"></i>
@@ -80,7 +51,7 @@
                                     <i class="uk-icon-star"></i>
                                     <i class="uk-icon-star"></i>
                                 </span>
-                                <span class="uk-float-right"><c:out value="${movie_program.year}" /></span>
+                                <span class="uk-float-right"><c:out value="${tv_program.year}" /></span>
                             </p>
                         </div>
              		</div>
@@ -170,8 +141,8 @@
 		// 상세보기 클릭 이벤트
 		$(".move").on("click",function(e) {
 			e.preventDefault();
-			actionForm.append("<input type='hidden' name='bno' value='" + $(this).attr("href")	+ "'>");
-			actionForm.attr("action", "/front/tvshow");
+			actionForm.append("<input type='hidden' name='prog_num' value='" + $(this).attr("href")	+ "'>");
+			actionForm.attr("action", "/front/tv_media");
 			actionForm.submit();
 		});
 		

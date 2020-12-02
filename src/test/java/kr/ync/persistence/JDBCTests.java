@@ -23,8 +23,8 @@ public class JDBCTests {
 	@Test
 	public void testConnection() {
 
-		try (Connection con = DriverManager.getConnection("jdbc:oracle:thin:@oracle11gr2.crwpeutgjyaj.ap-northeast-2.rds.amazonaws.com:15211:ORCL", "JIT00030",
-				"JIT00030")) {
+		try (Connection con = DriverManager.getConnection("jdbc:oracle:thin:@oracle11gr2.crwpeutgjyaj.ap-northeast-2.rds.amazonaws.com:15211:ORCL", "JIT00011",
+				"JIT00011")) {
 
 			log.info(con);
 		} catch (Exception e) {

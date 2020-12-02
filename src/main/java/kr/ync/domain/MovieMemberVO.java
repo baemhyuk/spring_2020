@@ -14,4 +14,6 @@ public class MovieMemberVO {
 	private String phone_num;
 	private int user_level;
 	
+	private List<AuthVO> auth;
+	
 }

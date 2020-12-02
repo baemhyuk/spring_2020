@@ -11,6 +11,8 @@ public interface MovieMemberMapper {
 	public List<MovieMemberVO> getList();
 
 	public int update(MovieMemberVO movie_member);
+
+	public MovieMemberVO read(String userName);
 	
 	
 }

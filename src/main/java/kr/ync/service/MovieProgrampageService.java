@@ -28,8 +28,9 @@ public interface MovieProgrampageService {
 	public List<MovieProgrampageVO> getListWithPaging_tvshow(Criteria cri);
 //
 //	//추가
-	public int getTotal(Criteria cri);
-	public int getTotal2(Criteria cri);
+	public int getTotal_movie(Criteria cri);
+	
+	public int getTotal_tv(Criteria cri);
 	
 
 	

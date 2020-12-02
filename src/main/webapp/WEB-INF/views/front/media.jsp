@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<sec:authentication var="principal" property="principal"/>    
 
 <!DOCTYPE html>
 <html lang="en-gb" dir="ltr">
@@ -7,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Webflix - Streaming Media Theme - Media Page</title>
+    <title><c:out value="${movie.title}" /> - MOVIE</title>
     <link rel="shortcut icon" href="../../../resources/images/favicon.ico" type="../../../resources/images/x-icon">
     <link rel="apple-touch-icon-precomposed" href="../../../resources/images/apple-touch-icon.png">
 
@@ -32,13 +35,47 @@
                 <input class="uk-search-field" type="search" placeholder="Search..." autocomplete="off">
                 <div class="uk-dropdown uk-dropdown-flip uk-dropdown-search" aria-expanded="false"></div>
             </form>
+            
+            <sec:authorize access="isAnonymous()">
+				
             <div class="uk-navbar-flip uk-hidden-small">
                 <div class="uk-button-group">
-                    <a class="uk-button uk-button-link uk-button-large" href="signup.html">Sign up</a>
-                    <a class="uk-button uk-button-success uk-button-large uk-margin-left" href="login.html"><i
-                            class="uk-icon-lock uk-margin-small-right"></i> Log in</a>
+                    <a class="uk-button uk-button-link uk-button-large" href="/front/signup">Sign up</a>
+                    <a class="uk-button uk-button-success uk-button-large uk-margin-left" href="/front/login">
+                    	<i class="uk-icon-lock uk-margin-small-right"></i> Log in
+                    </a>
                 </div>
             </div>
+     
+        </sec:authorize>
+        
+		<sec:authorize access="isAuthenticated()">
+			
+			<sec:authorize access="hasRole('ROLE_USER')">
+			<div class="uk-navbar-flip uk-hidden-small">
+				<div class="uk-button-group">
+					<p class="uk-button uk-button-link uk-button-large">${principal.member.user_name}님</p>
+					<a class="uk-button uk-button-success uk-button-large uk-margin-left" href="/front/logout">
+	                	 Log out
+	                </a>
+	        	</div>
+	        </div>
+	        </sec:authorize>
+	        
+	        <sec:authorize access="hasRole('ROLE_ADMIN')">
+			<div class="uk-navbar-flip uk-hidden-small">
+				<div class="uk-button-group">
+					<p class="uk-button uk-button-link uk-button-large">관리자 ${principal.member.user_name}님</p>
+					<a class="uk-button uk-button-admin uk-button-large uk-margin-left" href="../admin/admin_movie">Admin</a>
+					<a class="uk-button uk-button-success uk-button-large uk-margin-left" href="/front/logout">
+	                	 Log out
+	                </a>
+	        	</div>
+	        </div>
+	        </sec:authorize>
+	        
+		</sec:authorize>
+            
             <a href="#offcanvas" class="uk-navbar-toggle uk-visible-small uk-icon-medium" data-uk-offcanvas></a>
             <div class="uk-navbar-flip uk-visible-small">
                 <a href="#offcanvas" class="uk-navbar-toggle uk-navbar-toggle-alt uk-icon-medium" data-uk-offcanvas></a>
@@ -72,8 +109,7 @@
             <div class="uk-grid">
                 <div class="uk-width-medium-3-10">
                     <div class="media-cover">
-                        <img src="https://images-na.ssl-images-amazon.com/images/I/A1inGqJJHXL._AC_SL1500_.jpg"
-                            alt="Image" class="uk-scrollspy-inview uk-animation-fade">
+                        <img src="<c:out value="${movie.poster}" />" alt="Image" class="uk-scrollspy-inview uk-animation-fade">
                     </div>
                     <a class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"
                         href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
@@ -93,13 +129,13 @@
                             </li>
                         </ul>
                     </div>
-
+					
                     <ul id="media-tabs" class="uk-switcher">
 
                         <!--     start Tab Panel 1 (Reviews Sections) -->
 
                         <li>
-                            <h2 class="uk-text-contrast uk-margin-large-top">Media title goes here <span
+                            <h2 class="uk-text-contrast uk-margin-large-top"><c:out value="${movie.title}" /><span
                                     class="rating uk-margin-small-left uk-h4 uk-text-warning">
                                     <i class="uk-icon-star "></i>
                                     <i class="uk-icon-star"></i>
@@ -108,38 +144,22 @@
                                     <i class="uk-icon-star"></i>
                                 </span></h2>
                             <ul class="uk-subnav uk-subnav-line">
-                                <li><i class="uk-icon-star uk-margin-small-right"></i> 9.5</li>
-                                <li><i class="uk-icon-clock-o uk-margin-small-right"></i> 108 Mins</li>
-                                <li> March 04, 2016</li>
+                                <li><i class="uk-icon-star uk-margin-small-right"></i><c:out value="${movie.rate}" /></li>
+                                <li><c:out value="${movie.year}" /></li>
                             </ul>
                             <hr>
-                            <p class="uk-text-muted uk-h4">Following the events of Age of Ultron, the collective
-                                governments of the world pass an act designed to regulate all superhuman activity. This
-                                polarizes opinion amongst the Avengers, causing two factions to side with Iron Man or
-                                Captain America, which causes an epic battle between former allies.</p>
+                            <p class="uk-text-muted uk-h4"><c:out value="${movie.content}" /></p>
                             <dl class="uk-description-list-horizontal uk-margin-top">
-                                <dt>Starring</dt>
-                                <dd>
-                                    <ul class="uk-subnav ">
-                                        <li><a href="#">Actor 1</a></li>
-                                        <li><a href="#">Actor 2</a></li>
-                                        <li><a href="#">Actor 3</a></li>
-                                    </ul>
-                                </dd>
                                 <dt>Genres</dt>
                                 <dd>
                                     <ul class="uk-subnav ">
-                                        <li><a href="#">Comedy </a></li>
-                                        <li><a href="#">Romance</a></li>
-                                        <li><a href="#">Crime</a></li>
+                                        <li><c:out value="${movie.genre}" /></li>
                                     </ul>
                                 </dd>
                                 <dt>Countries</dt>
                                 <dd>
                                     <ul class="uk-subnav ">
-                                        <li><a href="#">Canada</a></li>
-                                        <li><a href="#">USA</a></li>
-                                        <li><a href="#">United Kingdom</a></li>
+                                        <li><c:out value="${movie.country}" /></a></li>
                                     </ul>
                                 </dd>
                             </dl>
@@ -190,81 +210,6 @@
                                             </div>
                                         </article>
                                     </li>
-                                    <li>
-                                        <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                            <header class="uk-comment-header">
-                                                <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar1.jpg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@movielover</h4>
-                                                <div class="uk-comment-meta">5 days ago </div>
-                                            </header>
-                                            <div class="uk-comment-body">
-                                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                                                    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                    erat, sed diam voluptua.</p>
-                                            </div>
-                                        </article>
-                                    </li>
-                                    <li>
-                                        <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                            <header class="uk-comment-header">
-                                                <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar4.svg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@movielover</h4>
-                                                <div class="uk-comment-meta">23 days ago </div>
-                                            </header>
-                                            <div class="uk-comment-body">
-                                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                                                    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                    erat, sed diam voluptua.</p>
-                                            </div>
-                                        </article>
-                                    </li>
-                                    <li>
-                                        <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                            <header class="uk-comment-header">
-                                                <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar3.jpg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@movielover</h4>
-                                                <div class="uk-comment-meta">7 days ago </div>
-                                            </header>
-                                            <div class="uk-comment-body">
-                                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                                                    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                    erat, sed diam voluptua.</p>
-                                            </div>
-                                        </article>
-                                    </li>
-                                    <li>
-                                        <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                            <header class="uk-comment-header">
-                                                <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar2.jpg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@movielover</h4>
-                                                <div class="uk-comment-meta">84 days ago </div>
-                                            </header>
-                                            <div class="uk-comment-body">
-                                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                                                    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                    erat, sed diam voluptua.</p>
-                                            </div>
-                                        </article>
-                                    </li>
-                                    <li>
-                                        <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                            <header class="uk-comment-header">
-                                                <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar1.jpg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@movielover</h4>
-                                                <div class="uk-comment-meta">3 days ago </div>
-                                            </header>
-                                            <div class="uk-comment-body">
-                                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                                                    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                    erat, sed diam voluptua.</p>
-                                            </div>
-                                        </article>
-                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -276,8 +221,7 @@
                         <li>
                             <div class="uk-cover uk-margin-top" style="height: 400px;">
                                 <iframe data-uk-cover
-                                    src="http://www.youtube.com/embed/YE7VzlLtp-4?autoplay=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;loop=1&amp;modestbranding=1&amp;wmode=transparent"
-                                    width="560" height="315" frameborder="0" allowfullscreen=""></iframe>
+                                    src="<c:out value="${movie.video}" />" width="560" height="315" frameborder="0" allowfullscreen=""></iframe>
                             </div>
                         </li>
 

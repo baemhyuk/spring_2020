@@ -35,10 +35,18 @@ public class MovieProgrampageServiceImpl implements MovieProgrampageService {
 	}
 
 	@Override
-	public int getTotal(Criteria cri) {
+	public int getTotal_movie(Criteria cri) {
 		log.info("get total count");
 		
 		return mapper.getTotalCount(cri);
+	}
+	
+	@Override
+	public int getTotal_tv(Criteria cri) {
+		// TODO Auto-generated method stub
+		log.info("get total count");
+		
+		return mapper.getTotalCount2(cri);
 	}
 
 	@Override
@@ -85,13 +93,7 @@ public class MovieProgrampageServiceImpl implements MovieProgrampageService {
 		 return mapper.getList_tvshow();
 	}
 
-	@Override
-	public int getTotal2(Criteria cri) {
-		// TODO Auto-generated method stub
-		log.info("get total count");
-		
-		return mapper.getTotalCount2(cri);
-	}
+	
 	
 	
 

@@ -37,12 +37,6 @@ public class BoardController {
 
 	}
 	
-	@GetMapping("/media")
-	public void media() {
-
-	}
-	
-	
 	@GetMapping("/forgot-password")
 	public void forgotpassword() {
 		

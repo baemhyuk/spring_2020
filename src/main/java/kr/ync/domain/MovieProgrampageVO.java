@@ -17,4 +17,5 @@ public class MovieProgrampageVO {
 	private String genre;
 	private int div_num;
 	private String video;
+	private String prog_like;
 }

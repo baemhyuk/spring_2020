@@ -81,7 +81,7 @@ public class MovieProgrampageServiceTests {
 	public void totalTest() {
 		
 		Criteria cri = new Criteria();
-		log.info("total cnt " + service.getTotal(cri));
+		log.info("total cnt " + service.getTotal_movie(cri));
 		
 	}
 

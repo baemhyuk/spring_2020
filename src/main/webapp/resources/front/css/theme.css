@@ -699,21 +699,39 @@ border-radius: 3px;
   color: #ffffff;
 }
 .uk-button-success {
-  background-color: #ffffff;
-  color: #000;
+  background-color: #27ae60;
+  color: #ffffff;
 }
 .uk-button-success:hover,
 .uk-button-success:focus {
-  background-color: #FC4242;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #000;
 }
 .uk-button-success:active,
 .uk-button-success.uk-active {
-  background-color: #AC2C2C;
+  background-color: #2ecc71;
   color: #ffffff;
 }
+
+.uk-button-admin {
+  background-color: #2980b9;
+  color: #ffffff;
+}
+
+.uk-button-admin:hover,
+.uk-button-admin:focus {
+  background-color: #ffffff;
+  color: #000;
+}
+
+.uk-button-admin:active,
+.uk-button-admin.uk-active {
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+
 .uk-button-danger {
-  background-color: #d65b49;
+  background-color: #3498db;
   color: #ffffff;
 }
 .uk-button-danger:hover,

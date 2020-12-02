@@ -24,31 +24,21 @@
 	
 	<select id="getList_index" resultType="kr.ync.domain.MovieProgrampageVO">
 	<![CDATA[
-		select * from programpage where div_num = 1
+		select * from programpage 
+		where div_num = 1
 		]]>
 	</select>
 	
 	<select id="getList_tvshow" resultType="kr.ync.domain.MovieProgrampageVO">
 	<![CDATA[
-		select * from programpage where div_num = 2
+		select * from programpage 
+		where div_num = 2 
 		]]>
 	</select>
 	
 	<insert id="insert">
 		insert into programpage (prog_num, title, poster, year, rate, content, country, genre, div_num, video)
 		values (seq_prog_num.nextval, #{title}, #{poster}, #{year}, #{rate}, #{content}, #{country}, #{genre}, #{div_num}, #{video})
-	</insert>
-	
-	<insert id="insertSelectKey">
-
-		<selectKey keyProperty="bno" order="BEFORE"
-			resultType="Long">
-			select seq_board.nextval from dual
-		</selectKey>
-
-		insert into tbl_board (bno,title,content, writer, file_1, file_2, file_3)
-		values (#{bno},
-		#{title}, #{content}, #{writer}, #{file_1}, #{file_2}, #{file_3})
 	</insert>
 	
 	<select id="read" resultType="kr.ync.domain.MovieProgrampageVO">
@@ -62,138 +52,19 @@
  
 	<update id="update">
 		update programpage
-		set title= #{title},
-			poster=#{poster},
+		set prog_num = #{prog_num},
+			poster= #{poster},
+			title= #{title},
 			year = #{year},
 			rate = #{rate},
 			content = #{content},
 			country = #{country},
 			genre = #{genre},
 			div_num = #{div_num},
-			video = #{video}
-			
+			video = #{video},
+			prog_like = #{prog_like}
 		where prog_num = #{prog_num}
 	</update>
-	
-	<!-- <select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
-		<![CDATA[
-  		SELECT	bno,
-  				title,
-  				content,
-  				writer,
-  				regdate,
-  				updatedate
-		FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
-						rownum rn,
-						bno,
-						title,
-						content,
-						writer,
-						regdate,
-						updatedate
-				FROM	tbl_board
-				WHERE	rownum <= 20 
-				)
-		WHERE rn > 10   
-		]]>
-	</select> -->
-	<!-- 
-	<select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
-		<![CDATA[
-  		SELECT	bno,
-  				title,
-  				content,
-  				writer,
-  				regdate,
-  				updatedate
-		FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
-						rownum rn,
-						bno,
-						title,
-						content,
-						writer,
-						regdate,
-						updatedate
-				FROM	tbl_board
-				WHERE	rownum <= #{pageNum} * #{amount}
-				)
-		WHERE rn > (#{pageNum} -1) * #{amount}
-		]]>
-	</select>
-	 -->
-	<!-- 
-	<select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
-		<![CDATA[
-			SELECT	bno,
-					title,
-					content,
-					writer,
-					regdate,
-					updatedate
-			FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
-        					rownum rn,
-        					bno,
-        					title,
-        					content,
-        					writer,
-        					regdate,
-        					updatedate 
-					FROM	tbl_board
-					WHERE
-		]]>	
-					<trim prefix="(" suffix=") AND " prefixOverrides="OR">
-						<foreach item='type' collection="typeArr">
-							<trim prefix="OR">
-								<choose>
-									<when test="type == 'T'.toString()">
-										title like '%'||#{keyword}||'%'
-									</when>
-									<when test="type == 'C'.toString()">
-										content like '%'||#{keyword}||'%'
-									</when>
-									<when test="type == 'W'.toString()">
-										writer like '%'||#{keyword}||'%'
-									</when>
-								</choose>
-							</trim>
-						</foreach>
-					</trim>
-		<![CDATA[
-					rownum <= #{pageNum} * #{amount}
-      				)
-			WHERE rn > (#{pageNum} -1) * #{amount}   
-  		]]>
-	</select>
-	 -->
-	
-	<!-- <select id="getListWithPaging" resultType="kr.ync.domain.BoardVO">
-		<![CDATA[
-		SELECT	bno,
-				title,
-				content,
-				writer,
-				regdate,
-				updatedate
-		FROM	(SELECT /*+INDEX_DESC(tbl_board pk_board) */
-        				rownum rn,
-        				bno,
-        				title,
-        				content,
-        				writer,
-        				regdate,
-        				updatedate 
-      			FROM	tbl_board
-				WHERE 
-  		]]>
-  		
-		<include refid="criteria"></include> 
-      
-		<![CDATA[    
-      			rownum <= #{pageNum} * #{amount}
-      			)
-  		WHERE rn > (#{pageNum} -1) * #{amount}   
-		]]>
-	</select> -->
 	
 	<select id="getListWithPaging_index" resultType="kr.ync.domain.MovieProgrampageVO">
 		<![CDATA[
@@ -208,7 +79,7 @@
 				poster,
 				video,
 				prog_like
-		FROM	(SELECT /*+INDEX_DESC(programpage seq_prog_num) */
+		FROM	(SELECT /*+INDEX_DESC(programpage XPK영화_및_TV페이지) */
         				rownum rn,
         				title,
 						year,
@@ -222,15 +93,18 @@
 						video,
 						prog_like
       			FROM	programpage
-				WHERE 
+				WHERE	div_num = 1
+							 				
   		]]>
 		<include refid="criteria"></include> 
       
 		<![CDATA[    
-      			rownum <= #{pageNum} * #{amount}
+      			and rownum <= #{pageNum} * #{amount}
+      			order by year desc
       			)
   		WHERE rn > (#{pageNum} -1) * #{amount}
-  		AND   div_num = 1   
+  		
+  		
 		]]>
 	</select>
 	
@@ -247,7 +121,7 @@
 				poster,
 				video,
 				prog_like
-		FROM	(SELECT /*+INDEX_DESC(programpage seq_prog_num) */
+		FROM	(SELECT /*+INDEX_DESC(programpage XPK영화_및_TV페이지) */
         				rownum rn,
         				title,
 						year,
@@ -261,26 +135,19 @@
 						video,
 						prog_like
       			FROM	programpage
-				WHERE 
+				WHERE 	div_num = 2  
   		]]>
 		<include refid="criteria"></include> 
       
 		<![CDATA[    
-      			rownum <= #{pageNum} * #{amount}
+      			and rownum <= #{pageNum} * #{amount}
+      			order by year desc
       			)
   		WHERE rn > (#{pageNum} -1) * #{amount}
-  		AND	  div_num = 2   
+   
 		]]>
 	</select>
-	
-	<!-- 
-	<select id="getTotalCount" resultType="int">
-		<![CDATA[
-		select count(*) from tbl_board where 
-		bno > 0
-		]]>
-	</select>
-	 -->
+
 	<select id="getTotalCount" resultType="int">
 		select count(*) from programpage where 
 		
@@ -303,7 +170,7 @@
 		]]>
 	</select>
 	
-	<update id="updateReplyCnt">
+	<!-- <update id="updateReplyCnt">
 		UPDATE tbl_board SET replycnt = replycnt + #{amount} WHERE bno = #{bno}
-	</update> 
+	</update> --> 
 </mapper>

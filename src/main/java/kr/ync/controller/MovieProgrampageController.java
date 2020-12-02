@@ -1,11 +1,14 @@
 package kr.ync.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.ync.domain.Criteria;
@@ -22,27 +25,47 @@ public class MovieProgrampageController {
 	@Autowired
 	private MovieProgrampageService service;
 	
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	@GetMapping("/index")
 	  public void index(Criteria cri, Model model) {
 	      
 	      log.info("index : " + cri);
 	      
-	      int total = service.getTotal(cri);
+	      int total = service.getTotal_movie(cri);
 	      log.info("total : " + total);
 	      model.addAttribute("movie", service.getListWithPaging_index(cri));
 	      model.addAttribute("pageMaker", new PageDTO(cri, total));
 	 }
 	
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	@GetMapping("/Tvshow")
 	  public void Tvshow(Criteria cri, Model model) {
 	      
 	      log.info("index : " + cri);
 	      
-	      int total = service.getTotal2(cri);
+	      int total = service.getTotal_tv(cri);
 	      log.info("total : " + total);
 	      model.addAttribute("tv", service.getListWithPaging_tvshow(cri));
 	      model.addAttribute("pageMaker", new PageDTO(cri, total));
 	 }
+	
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@GetMapping("/media")
+	public void media(@RequestParam("prog_num") Long prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
+		log.info("/media");
+		model.addAttribute("movie", service.get(prog_num));
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@GetMapping("/tv_media")
+	public void tv_media(@RequestParam("prog_num") Long prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
+		log.info("/tv_media");
+		model.addAttribute("tv", service.get(prog_num));
+	}
+	
+	
+	
+	
 	
 //	@PostMapping("/register")
 //	public String register(MovieProgrampageVO movie_program, RedirectAttributes rttr) {
