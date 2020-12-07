@@ -55,6 +55,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <a class="navbar-brand" href="../admin/admin_movie">Admin</a>
                 <a class="navbar-brand" href="../front/index">Home</a>
             </div>
             <!-- /.navbar-header -->
@@ -264,7 +265,7 @@
     <li class="divider"></li>
 		<sec:authorize access="isAuthenticated()">
 		 
-		<li id="logout"><a href="/customLogout"><i class="fa fa-sign-out fa-fw"></i>
+		<li id="logout"><a href="../front/logout"><i class="fa fa-sign-out fa-fw"></i>
 		    Logout</a></li>
 		</sec:authorize>
 		

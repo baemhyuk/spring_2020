@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><c:out value="${movie.title}" /> - MOVIE</title>
+    <title><c:out value="${tv.title}" /> - TV</title>
     <link rel="shortcut icon" href="../../../resources/images/favicon.ico" type="../../../resources/images/x-icon">
     <link rel="apple-touch-icon-precomposed" href="../../../resources/images/apple-touch-icon.png">
 
@@ -102,14 +102,14 @@
 
         <div class="uk-container uk-container-center uk-width-8-10">
             <div class="media-container  uk-container-center">
-                <a class="uk-button uk-button-large uk-button-link uk-text-muted" href="/"><i
+                <a class="uk-button uk-button-large uk-button-link uk-text-muted" href="/front/Tvshow"><i
                         class=" uk-icon-arrow-left uk-margin-small-right"></i> Back</a>
             </div>
 
             <div class="uk-grid">
                 <div class="uk-width-medium-3-10">
                     <div class="media-cover">
-                        <img src="<c:out value="${movie.poster}" />" alt="Image" class="uk-scrollspy-inview uk-animation-fade">
+                        <img src="<c:out value="${tv.poster}" />" alt="Image" class="uk-scrollspy-inview uk-animation-fade">
                     </div>
                     <a class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"
                         href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
@@ -135,7 +135,7 @@
                         <!--     start Tab Panel 1 (Reviews Sections) -->
 
                         <li>
-                            <h2 class="uk-text-contrast uk-margin-large-top"><c:out value="${movie.title}" /><span
+                            <h2 class="uk-text-contrast uk-margin-large-top"><c:out value="${tv.title}" /><span
                                     class="rating uk-margin-small-left uk-h4 uk-text-warning">
                                     <i class="uk-icon-star "></i>
                                     <i class="uk-icon-star"></i>
@@ -144,22 +144,22 @@
                                     <i class="uk-icon-star"></i>
                                 </span></h2>
                             <ul class="uk-subnav uk-subnav-line">
-                                <li><i class="uk-icon-star uk-margin-small-right"></i><c:out value="${movie.rate}" /></li>
-                                <li><c:out value="${movie.year}" /></li>
+                                <li><i class="uk-icon-star uk-margin-small-right"></i><c:out value="${tv.rate}" /></li>
+                                <li><c:out value="${tv.year}" /></li>
                             </ul>
                             <hr>
-                            <p class="uk-text-muted uk-h4"><c:out value="${movie.content}" /></p>
+                            <p class="uk-text-muted uk-h4"><c:out value="${tv.content}" /></p>
                             <dl class="uk-description-list-horizontal uk-margin-top">
                                 <dt>Genres</dt>
                                 <dd>
                                     <ul class="uk-subnav ">
-                                        <li><c:out value="${movie.genre}" /></li>
+                                        <li><c:out value="${tv.genre}" /></li>
                                     </ul>
                                 </dd>
                                 <dt>Countries</dt>
                                 <dd>
                                     <ul class="uk-subnav ">
-                                        <li><c:out value="${movie.country}" /></a></li>
+                                        <li><c:out value="${tv.country}" /></a></li>
                                     </ul>
                                 </dd>
                             </dl>
@@ -221,7 +221,7 @@
                         <li>
                             <div class="uk-cover uk-margin-top" style="height: 400px;">
                                 <iframe data-uk-cover
-                                    src="<c:out value="${movie.video}" />" width="560" height="315" frameborder="0" allowfullscreen=""></iframe>
+                                    src="<c:out value="${tv.video}" />" width="560" height="315" frameborder="0" allowfullscreen=""></iframe>
                             </div>
                         </li>
 
