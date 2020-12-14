@@ -64,10 +64,10 @@ public class MovieProgrampageServiceImpl implements MovieProgrampageService {
 	}
 
 	@Override
-	public MovieProgrampageVO get(Long bno) {
-		log.info("get......" + bno);
+	public MovieProgrampageVO get(int prog_num) {
+		log.info("get......" + prog_num);
 
-		return mapper.read(bno);
+		return mapper.read(prog_num);
 	}
 
 	@Override
@@ -80,10 +80,10 @@ public class MovieProgrampageServiceImpl implements MovieProgrampageService {
 	}
 
 	@Override
-	public boolean remove(long bno) {
-		log.info("remove...." + bno);
+	public boolean remove(int prog_num) {
+		log.info("remove...." + prog_num);
 
-		return mapper.delete(bno) == 1;
+		return mapper.delete(prog_num) == 1;
 	}
 
 	@Override

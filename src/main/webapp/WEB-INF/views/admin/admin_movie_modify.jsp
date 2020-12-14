@@ -127,7 +127,7 @@ $(document).ready(function() {
 	      
 	    }else if(operation === 'list'){
 	      //move to list
-	      formObj.attr("action", "/admin/admin_movie_get").attr("method","get");
+	      formObj.attr("action", "/admin/admin_movie").attr("method","get");
 
 	      var pageNumTag = $("input[name='pageNum']").clone();
 	      var amountTag = $("input[name='amount']").clone();

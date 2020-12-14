@@ -11,11 +11,11 @@ public interface MovieProgrampageService {
 	// 글 등록
 	public void register(MovieProgrampageVO movie_program);
 	
-	public MovieProgrampageVO get(Long bno);
+	public MovieProgrampageVO get(int prog_num);
 	
 	public boolean modify(MovieProgrampageVO movie_program);
 
-	public boolean remove(long bno);
+	public boolean remove(int prog_num);
 	
 	// 전체 글 목록
 	public List<MovieProgrampageVO> getList_index();

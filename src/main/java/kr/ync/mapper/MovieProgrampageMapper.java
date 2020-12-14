@@ -24,7 +24,7 @@ public interface MovieProgrampageMapper {
 
 	public int update(MovieProgrampageVO movie_program);
 
-	public MovieProgrampageVO read(Long bno);
+	public MovieProgrampageVO read(int prog_num);
 
 	public int delete(long bno);
 

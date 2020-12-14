@@ -6,13 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.ync.domain.Criteria;
-import kr.ync.domain.MovieProgrampageVO;
 import kr.ync.domain.PageDTO;
 import kr.ync.service.MovieProgrampageService;
 import lombok.extern.log4j.Log4j;
@@ -51,14 +48,14 @@ public class MovieProgrampageController {
 	
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	@GetMapping("/media")
-	public void media(@RequestParam("prog_num") Long prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void media(@RequestParam("prog_num") int prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("/media");
 		model.addAttribute("movie", service.get(prog_num));
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	@GetMapping("/tv_media")
-	public void tv_media(@RequestParam("prog_num") Long prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void tv_media(@RequestParam("prog_num") int prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("/tv_media");
 		model.addAttribute("tv", service.get(prog_num));
 	}

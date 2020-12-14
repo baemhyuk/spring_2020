@@ -91,14 +91,14 @@ public class AdminProgramPageController {
 	}
 	
 	@GetMapping({ "/admin_movie_get", "/admin_movie_modify" })
-	public void admin_movie_get(@RequestParam("prog_num") Long prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void admin_movie_get(@RequestParam("prog_num") int prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
 
 		log.info("/admin_movie_get or admin_movie_modify");
 		model.addAttribute("movie_get", service.get(prog_num));
 	}
 	
 	@GetMapping({ "/admin_tv_get", "/admin_tv_modify" })
-	public void admin_tv_get(@RequestParam("prog_num") Long prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
+	public void admin_tv_get(@RequestParam("prog_num") int prog_num, @ModelAttribute("cri") Criteria cri, Model model) {
 
 		log.info("/admin_tv_get or admin_tv_modify");
 		model.addAttribute("tv_get", service.get(prog_num));
@@ -127,7 +127,7 @@ public class AdminProgramPageController {
 	}
 	
 	@PostMapping("/admin_movie_remove")
-	public String admin_movie_remove(@RequestParam("prog_num") Long prog_num, Criteria cri, RedirectAttributes rttr) {
+	public String admin_movie_remove(@RequestParam("prog_num") int prog_num, Criteria cri, RedirectAttributes rttr) {
 
 		log.info("remove..." + prog_num);
 		if (service.remove(prog_num)) {
@@ -136,9 +136,9 @@ public class AdminProgramPageController {
 
 		return "redirect:/admin/admin_movie" + cri.getListLink();
 	}
-	
+
 	@PostMapping("/admin_tv_remove")
-	public String admin_tv_remove(@RequestParam("prog_num") Long prog_num, Criteria cri, RedirectAttributes rttr) {
+	public String admin_tv_remove(@RequestParam("prog_num") int prog_num, Criteria cri, RedirectAttributes rttr) {
 
 		log.info("remove..." + prog_num);
 		if (service.remove(prog_num)) {
