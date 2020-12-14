@@ -7,12 +7,13 @@ import lombok.Data;
 @Data
 public class ReplyVO {
 
-  private Long rno;
-  private Long bno;
+	private int rno;
+	private int prog_num;
 
-  private String reply;
-  private String replyer;
-  private Date replyDate;
-  private Date updateDate;
-
+	private String reply;
+	private String user_id;
+	private Date replydate;
+	private Date updatedate;
+	private int rating;
+	
 }

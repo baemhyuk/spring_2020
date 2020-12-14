@@ -2,9 +2,9 @@ package kr.ync.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import kr.ync.domain.BoardVO;
 import kr.ync.domain.Criteria;
 import kr.ync.domain.MovieProgrampageVO;
 
@@ -32,6 +32,6 @@ public interface MovieProgrampageMapper {
 	
 	public int getTotalCount2(Criteria cri);
 	
-
+	public void updateReplyCnt(@Param("prog_num") int prog_num, @Param("amount") int amount);
 	
 }

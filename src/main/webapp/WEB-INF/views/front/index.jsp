@@ -48,10 +48,7 @@
                             <p>
                             <span class="rating">
                                     <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
+                                    <c:out value="${movie_program.rate}" />
                                 </span>
                                 <span class="uk-float-right"><c:out value="${movie_program.year}" /></span>
                             </p>

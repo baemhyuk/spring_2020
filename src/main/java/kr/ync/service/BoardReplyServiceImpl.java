@@ -8,64 +8,59 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.ync.domain.Criteria;
 import kr.ync.domain.ReplyPageDTO;
-import kr.ync.domain.ReplyVO;
 import kr.ync.domain.BoardReplyVO;
 import kr.ync.mapper.BoardMapper;
 import kr.ync.mapper.BoardReplyMapper;
-import kr.ync.mapper.MovieProgrampageMapper;
-import kr.ync.mapper.ReplyMapper;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Service
 @Log4j
-public class ReplyServiceImpl implements ReplyService {
+public class BoardReplyServiceImpl implements BoardReplyService {
 
 	@Autowired
-	private ReplyMapper mapper;
+	private BoardReplyMapper mapper;
 	
 	@Autowired
-	private MovieProgrampageMapper programMapper;
+	private BoardMapper boardMapper;
 	
 	@Transactional
 	@Override
-	public int register(ReplyVO vo) {
+	public int register(BoardReplyVO vo) {
 		log.info("register......" + vo);
-		programMapper.updateReplyCnt(vo.getProg_num(), 1);
+		boardMapper.updateReplyCnt(vo.getBno(), 1);
 		return mapper.insert(vo);
 	}
 
 	@Override
-	public ReplyVO get(int rno) {
+	public BoardReplyVO get(Long rno) {
 		log.info("get......" + rno);
 		return mapper.read(rno);
 	}
 
 	@Override
-	public int modify(ReplyVO vo) {
+	public int modify(BoardReplyVO vo) {
 		log.info("modify......" + vo);
 		return mapper.update(vo);
 	}
 	
 	@Transactional
 	@Override
-	public int remove(int rno) {
+	public int remove(Long rno) {
 		log.info("remove...." + rno);
 		
-		ReplyVO vo = mapper.read(rno);
-		programMapper.updateReplyCnt(vo.getProg_num(), -1);
+		BoardReplyVO vo = mapper.read(rno);
+		boardMapper.updateReplyCnt(vo.getBno(), -1);
 		return mapper.delete(rno);
 	}
 
 	@Override
-	public List<ReplyVO> getList(Criteria cri, int prog_num) {
-		log.info("get Reply List of a prog_num " + prog_num);
-		return mapper.getListWithPaging(cri, prog_num);
+	public List<BoardReplyVO> getList(Criteria cri, Long bno) {
+		log.info("get Reply List of a Board " + bno);
+		return mapper.getListWithPaging(cri, bno);
 	}
 
 	@Override
-	public ReplyPageDTO getListWithPaging(Criteria cri, int prog_num) {
+	public ReplyPageDTO getListWithPaging(Criteria cri, Long bno) {
 		// TODO Auto-generated method stub
 		return null;
 	}

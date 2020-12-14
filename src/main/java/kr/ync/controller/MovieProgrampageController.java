@@ -62,22 +62,6 @@ public class MovieProgrampageController {
 		log.info("/tv_media");
 		model.addAttribute("tv", service.get(prog_num));
 	}
-	
-	
-	
-	
-	
-//	@PostMapping("/register")
-//	public String register(MovieProgrampageVO movie_program, RedirectAttributes rttr) {
-//		
-//		log.info("register: " + movie_program);
-//	      
-//	      service.register(movie_program);
-//	      
-//	      rttr.addFlashAttribute("result" , movie_program.getProg_num());
-//	      
-//	      return "redirect:/front/index";
-//	}
 
 	
 }

@@ -78,7 +78,8 @@
 				prog_num,
 				poster,
 				video,
-				prog_like
+				prog_like,
+				replycnt
 		FROM	(SELECT /*+INDEX_DESC(programpage XPK영화_및_TV페이지) */
         				rownum rn,
         				title,
@@ -91,7 +92,8 @@
 						prog_num,
 						poster,
 						video,
-						prog_like
+						prog_like,
+						replycnt
       			FROM	programpage
 				WHERE	div_num = 1
 							 				
@@ -170,7 +172,7 @@
 		]]>
 	</select>
 	
-	<!-- <update id="updateReplyCnt">
-		UPDATE tbl_board SET replycnt = replycnt + #{amount} WHERE bno = #{bno}
-	</update> --> 
+	 <update id="updateReplyCnt">
+		UPDATE programpage SET replycnt = replycnt + #{amount} WHERE prog_num = #{prog_num}
+	</update> 
 </mapper>

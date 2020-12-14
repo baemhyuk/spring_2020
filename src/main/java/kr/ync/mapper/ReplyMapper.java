@@ -8,18 +8,18 @@ import kr.ync.domain.Criteria;
 import kr.ync.domain.ReplyVO;
 
 public interface ReplyMapper {
-
+	
 	public int insert(ReplyVO vo);
 
-	public ReplyVO read(Long bno);
+	public ReplyVO read(int prog_num);
 
-	public int delete(Long bno);
+	public int delete(int prog_num);
 
 	public int update(ReplyVO reply);
 	
-	public List<ReplyVO> getList(@Param("cri") Criteria cri, @Param("bno") Long bno);
+	public List<ReplyVO> getList(@Param("cri") Criteria cri, @Param("prog_num") int prog_num);
 	
-	public List<ReplyVO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") Long bno);
+	public List<ReplyVO> getListWithPaging(@Param("cri") Criteria cri, @Param("prog_num") int prog_num);
 
-	public int getCountByBno(Long bno);
+	public int getCountByBno(int prog_num);
 }

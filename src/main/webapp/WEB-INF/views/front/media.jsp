@@ -14,6 +14,8 @@
     <link rel="shortcut icon" href="../../../resources/images/favicon.ico" type="../../../resources/images/x-icon">
     <link rel="apple-touch-icon-precomposed" href="../../../resources/images/apple-touch-icon.png">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
     <!--     Include UIKit CSS   -->
     <link rel="stylesheet" href="../../../resources/front/css/uikit.css">
 
@@ -111,8 +113,6 @@
                     <div class="media-cover">
                         <img src="<c:out value="${movie.poster}" />" alt="Image" class="uk-scrollspy-inview uk-animation-fade">
                     </div>
-                    <a class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"
-                        href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
                 </div>
                 <div class="uk-width-medium-7-10">
                     <div class="">
@@ -138,13 +138,9 @@
                             <h2 class="uk-text-contrast uk-margin-large-top"><c:out value="${movie.title}" /><span
                                     class="rating uk-margin-small-left uk-h4 uk-text-warning">
                                     <i class="uk-icon-star "></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
+                                    <c:out value="${movie.rate}" />
                                 </span></h2>
                             <ul class="uk-subnav uk-subnav-line">
-                                <li><i class="uk-icon-star uk-margin-small-right"></i><c:out value="${movie.rate}" /></li>
                                 <li><c:out value="${movie.year}" /></li>
                             </ul>
                             <hr>
@@ -172,35 +168,20 @@
 
                         <li>
                             <div class="uk-margin-small-top">
-                                <h3 class="uk-text-contrast uk-margin-top">Post a Review</h3>
-                                <div class="uk-alert uk-alert-warning" data-uk-alert="">
-                                    <a href="" class="uk-alert-close uk-close"></a>
-                                    <p><i class="uk-icon-exclamation-triangle uk-margin-small-right "></i> Please <a
-                                            class="uk-text-contrast" href="login.html"> Log in</a> or Sign up to post
-                                        reviews quicker.</p>
-                                </div>
-                                <form class="uk-form uk-margin-bottom">
-                                    <div class="uk-form-row">
-                                        <textarea class="uk-width-1-1" cols="30" rows="5"
-                                            placeholder="Type your review here..."></textarea>
-                                        <p class="uk-form-help-block">The <code>.uk-form-help-block</code> class creates
-                                            an associated paragraph.</p>
-                                    </div>
-                                    <div class="uk-form-row">
-                                        <a href=""
-                                            class="uk-button uk-button-large uk-button-success uk-float-right">Post</a>
-                                    </div>
-                                </form>
+                            <sec:authorize access="isAuthenticated()">
+                                <button id='addReplyBtn' class="uk-button uk-button-large uk-button-success uk-margin-top" data-toggle="modal" data-target="#myModal">Comment</button>                     
+                            </sec:authorize>
                             </div>
 
                             <div class="uk-scrollable-box uk-responsive-width " data-simplebar-direction="vertical">
-                                <ul class="uk-comment-list uk-margin-top">
+                            
+                                <ul class="chat uk-comment-list uk-margin-top">
                                     <li>
                                         <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
                                             <header class="uk-comment-header">
                                                 <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar3.jpg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@movielover</h4>
+                                                    src="../../../resources/images/avatar4.svg" width="50" height="50" alt="">
+                                                <h4 class="uk-comment-title">@user2</h4>
                                                 <div class="uk-comment-meta">2 days ago </div>
                                             </header>
                                             <div class="uk-comment-body">
@@ -233,8 +214,40 @@
             </div>
         </div>
     </div>
-    </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Username</label> 
+						<input class="form-control" name='user_id' value='${principal.member.user_name}' readonly="readonly">
+					</div>
+					<div class="form-group">
+		                <label>Comment</label> 
+		                <textarea class="form-control" name='reply' rows="8"></textarea>
+					</div>
+					<div class="form-group">
+		                <label>Rating</label> 
+		                <input>/5
+					</div>
+				</div>
+				
+				<div class="modal-footer">
+					<button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
+					<button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
+					<button id='modalRegisterBtn' type="button" class="btn btn-primary">Register</button>
+					<button id='modalCloseBtn' type="button" class="btn btn-default">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+        <!-- /.modal-dialog -->
+	</div>
     <!-- ./ Main Content (Media Page Section) -->
 
 
@@ -307,11 +320,276 @@
 
     <!-- Include JS -->
 
-    <script src="../../../resources/front/js/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../../../resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../resources/vendor/jquery/jquery.min.js"></script>
+  	<script src="../../../resources/js/reply.js"></script>
     <script src="../../../resources/front/js/simplebar.min.js"></script>
     <script src="../../../resources/front/js/uikit.min.js"></script>
     <script src="../../../resources/front/js/components/grid.min.js"></script>
     <script src="../../../resources/front/js/components/slideset.min.js"></script>
+  	
+  	
+  	<script type="text/javascript">
+  	$(document).ready(function () {
+  	  
+  		var bnoValue = '<c:out value="${movie.prog_num}" />';
+  		var replyUL = $(".chat");
+
+  		console.log(bnoValue);
+  		showList(1);
+  		
+  		// 댓글 목록을 출력하는 함수
+  		function showList(page){
+  			
+  			// console.log("show list " + page);
+  		    
+  			replyService.getList({bno:bnoValue, page: page|| 1 }, function(replyCnt, list) {
+  		      
+  			    // console.log("replyCnt: "+ replyCnt );
+  			    // console.log("list: " + list);
+  			    // console.log(list);
+  		    	
+  				if(page == -1){
+  					pageNum = Math.ceil(replyCnt/10.0);
+  					showList(pageNum);
+  					return;
+  				}
+  	 			
+  				var str="";
+  		     
+  				if(list == null || list.length == 0){
+  					replyUL.html("");
+  					return;
+  				}
+  		     
+  				for (var i = 0, len = list.length || 0; i < len; i++) {
+  					str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
+  					str +="  <div><div class='header'><strong class='primary-font'>["
+  						+ list[i].rno+"] "+list[i].user_id+"</strong>"; 
+  					str +="    <small class='pull-right text-muted'>"
+  						+ replyService.displayTime(list[i].replyDate)+"</small></div>";
+  					str +="    <p>"+list[i].reply+"</p></div></li>";
+  				}
+  		     
+  				replyUL.html(str);
+  		     
+  				showReplyPage(replyCnt);
+
+  		 
+  			});//end function
+  		     
+  		}//end showList
+
+  		// 댓글 페이징 처리
+  		var pageNum = 1;
+  	    var replyPageFooter = $(".panel-footer");
+  	    
+  	    function showReplyPage(replyCnt){
+  	      
+  	      var endNum = Math.ceil(pageNum / 10.0) * 10;  
+  	      var startNum = endNum - 9; 
+  	      
+  	      var prev = startNum != 1;
+  	      var next = false;
+  	      
+  	      if(endNum * 10 >= replyCnt){
+  	        endNum = Math.ceil(replyCnt/10.0);
+  	      }
+  	      
+  	      if(endNum * 10 < replyCnt){
+  	        next = true;
+  	      }
+  	      
+  	      var str = "<ul class='pagination pull-right'>";
+  	      
+  	      if(prev){
+  	        str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
+  	      }
+  	      
+  	      for(var i = startNum ; i <= endNum; i++){
+  	        
+  	        var active = pageNum == i? "active":"";
+  	        
+  	        str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+  	      }
+  	      
+  	      if(next){
+  	        str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+  	      }
+  	      
+  	      str += "</ul></div>";
+  	      
+  	      console.log(str);
+  	      
+  	      replyPageFooter.html(str);
+  	    }
+  	     
+  	    replyPageFooter.on("click","li a", function(e){
+  	       e.preventDefault();
+  	       console.log("page click");
+  	       
+  	       var targetPageNum = $(this).attr("href");
+  	       
+  	       console.log("targetPageNum: " + targetPageNum);
+  	       
+  	       pageNum = targetPageNum;
+  	       
+  	       showList(pageNum);
+  	     });
+  	 	// 댓글 페이징 처리 끝
+  	 	
+  	    
+  		/* 댓글 modal 창 동작 부분*/
+  		var modal = $(".modal");
+  	    var modalInputReply = modal.find("input[name='reply']");
+  	    var modalInputReplyer = modal.find("input[name='user_id']");
+  	    var modalInputReplyDate = modal.find("input[name='replyDate']");
+  	    var modalModBtn = $("#modalModBtn");
+  	    var modalRemoveBtn = $("#modalRemoveBtn");
+  	    var modalRegisterBtn = $("#modalRegisterBtn");
+
+  	 	// 댓글 인증 부분 추가
+  		var user_id = null;
+  	    
+  	    <sec:authorize access="isAuthenticated()">
+  	    	var user_id = '<sec:authentication property="principal.username"/>';   
+  		</sec:authorize>
+  	 
+  		const csrfHeaderName ="${_csrf.headerName}"; 
+  		const csrfTokenValue="${_csrf.token}";
+  	    
+  	    $("#modalCloseBtn").on("click", function(e){
+  	    	modal.modal('hide');
+  	    });
+  	    
+  	    $("#addReplyBtn").on("click", function(e){
+  			modal.find("input").val("");
+  			modal.find("input[name='user_id']").val(user_id);
+  			modalInputReplyDate.closest("div").hide();
+  			modal.find("button[id !='modalCloseBtn']").hide();
+  			
+  			modalRegisterBtn.show();
+  			$(".modal").modal("show");
+  	    });
+
+  	 	// Ajax Spring Security Header
+  	    $(document).ajaxSend(function(e, xhr, options) { 
+  			xhr.setRequestHeader(csrfHeaderName, csrfTokenValue); 
+  		});
+  		
+  	    // 댓글 등록
+  		modalRegisterBtn.on("click",function(e){
+  	      
+  			var reply = {
+  				reply: modalInputReply.val(),
+  				user_id:modalInputReplyer.val(),
+  	            bno:bnoValue
+  			};
+  	      
+  			replyService.add(reply, function(result){
+  	        
+  	        alert(result);
+  	        
+  	        modal.find("input").val("");
+  	        modal.modal("hide");
+  	        
+  	        showList(1);
+  	      });
+  	      
+  	    });
+  	    
+  		//댓글 조회 클릭 이벤트 처리 
+  	    $(".chat").on("click", "li", function(e){
+  	      
+  			var rno = $(this).data("rno");
+  			console.log(rno);
+  			
+  			replyService.get(rno, function(reply){
+  		
+  				modalInputReply.val(reply.reply);
+  				modalInputReplyer.val(reply.user_id);
+  				modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
+  				modal.data("rno", reply.rno);
+  				
+  				modal.find("button[id !='modalCloseBtn']").hide();
+  				modalModBtn.show();
+  				modalRemoveBtn.show();
+  				
+  				$(".modal").modal("show");
+  			});
+  		});
+  		
+  	 	// 댓글 수정 이벤트. security 적용 후
+  		modalModBtn.on("click", function(e){
+  			
+  			var originalReplyer = modalInputReplyer.val();
+  			
+  			var reply = {
+  					rno:modal.data("rno"), 
+  					reply: modalInputReply.val(),
+  					user_id: originalReplyer
+  					};
+  		  
+  			if(!user_id){
+  				alert("로그인후 수정이 가능합니다.");
+  				modal.modal("hide");
+  				return;
+  			}
+
+  			console.log("Original user_id: " + originalReplyer);
+  			
+  			if(user_id  != originalReplyer){
+  				alert("자신이 작성한 댓글만 수정이 가능합니다.");
+  				modal.modal("hide");
+  				return;
+  			}
+  			  
+  			replyService.update(reply, function(result){
+  				alert(result);
+  				modal.modal("hide");
+  				showList(pageNum);
+  			});
+  		});
+
+  		// 댓글 삭제 부분. security 적용 후
+  		modalRemoveBtn.on("click", function (e){
+  		  	  
+  			var rno = modal.data("rno");
+
+  			console.log("RNO: " + rno);
+  			console.log("user_id: " + user_id);
+  		   	  
+  			if(!user_id){
+  				alert("로그인후 삭제가 가능합니다.");
+  				modal.modal("hide");
+  				return;
+  			}
+  		   	  
+  			var originalReplyer = modalInputReplyer.val();
+  		   	  
+  			console.log("Original user_id: " + originalReplyer);
+  		   	  
+  			if(user_id !== originalReplyer){
+  		   		  
+  				alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+  				modal.modal("hide");
+  				return;
+  			}
+  		   	  
+  			replyService.remove(rno, originalReplyer, function(result){
+  		   	        
+  				alert(result);
+  				modal.modal("hide");
+  				showList(pageNum);
+  			});
+  		});
+  		
+  		/* 댓글 modal 창 동작 부분*/
+  		
+  	});
+</script>
+
 </body>
 
 </html>

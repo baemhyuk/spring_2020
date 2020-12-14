@@ -16,24 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.ync.domain.Criteria;
 import kr.ync.domain.ReplyPageDTO;
-import kr.ync.domain.ReplyVO;
-import kr.ync.service.ReplyService;
+import kr.ync.domain.BoardReplyVO;
+import kr.ync.service.BoardReplyService;
 import lombok.extern.log4j.Log4j;
 
-@RequestMapping("/replies/")
+@RequestMapping("/replies222/")
 @RestController
 @Log4j
-public class ReplyController {
+public class BoardReplyController {
 	
 	@Autowired
-	private ReplyService service;
+	private BoardReplyService service;
 	
 	// consumes은 호출하는쪽에서 application/json 요청만 받아들인다. 요청 컨텐트 타입 제한
 	// produces은 조건에 지정한 미디어 타입과 관련된 응답을 생성. 응답 컨텐트 타입 제한
 	// 명시적으로 consumes와 produces 조건을 각각 사용하는 것을 권장한다
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping(value = "/new", consumes = "application/json", produces = { MediaType.TEXT_PLAIN_VALUE })
-	public ResponseEntity<String> create(@RequestBody ReplyVO vo) {
+	public ResponseEntity<String> create(@RequestBody BoardReplyVO vo) {
 
 		log.info("ReplyVO: " + vo);
 
@@ -52,7 +52,7 @@ public class ReplyController {
 	// 해당 값 없어도 현재 브라우저는 UTF-8을 제대로 처리함.
 	// spring 5.2 부터 MediaType.APPLICATION_JSON_UTF8 로 수정하면됨
 	@GetMapping(value = "/{rno}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ReplyVO> get(@PathVariable("rno") int rno) {
+	public ResponseEntity<BoardReplyVO> get(@PathVariable("rno") Long rno) {
 
 		log.info("get: " + rno);
 
@@ -61,10 +61,10 @@ public class ReplyController {
 	
 	// PUT, PATCH method를 모두 적용시켜야 되기에 @RequestMapping을 사용
 	// 둘중 하나만 적용할려면 @PutMapping, @PatchMapping 을 사용하면 된다.
-	@PreAuthorize("principal.username == #vo.user_id")
+	@PreAuthorize("principal.username == #vo.replyer")
 	@RequestMapping(value = "/{rno}", method = { RequestMethod.PUT, RequestMethod.PATCH },
 					consumes = "application/json", produces = {	MediaType.TEXT_PLAIN_VALUE })
-	public ResponseEntity<String> modify(@RequestBody ReplyVO vo, @PathVariable("rno") int rno) {
+	public ResponseEntity<String> modify(@RequestBody BoardReplyVO vo, @PathVariable("rno") Long rno) {
 		
 		// @RequestBody 처리되는 data는 일반파라미터나 @PathVariable로 처리할 수 없다.
 		vo.setRno(rno);
@@ -78,12 +78,12 @@ public class ReplyController {
 
 	}
 
-	@PreAuthorize("principal.username == #vo.user_id")
+	@PreAuthorize("principal.username == #vo.replyer")
 	@DeleteMapping(value = "/{rno}", produces = { MediaType.TEXT_PLAIN_VALUE })
-	public ResponseEntity<String> remove(@RequestBody ReplyVO vo, @PathVariable("rno") int rno) {
+	public ResponseEntity<String> remove(@RequestBody BoardReplyVO vo, @PathVariable("rno") Long rno) {
 
 		log.info("remove: " + rno);
-		log.info("user_id: " + vo.getUser_id());
+		log.info("replyer: " + vo.getReplyer());
 
 		return service.remove(rno) == 1
 				? new ResponseEntity<>("success", HttpStatus.OK)
@@ -97,15 +97,15 @@ public class ReplyController {
 	// 페이징 처리된 댓글 목록을 가져오는 method
 	@GetMapping(value = "/pages/{bno}/{page}", produces = { MediaType.APPLICATION_XML_VALUE,
 															MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ReplyPageDTO> getList(@PathVariable("page") int page, @PathVariable("prog_num") int prog_num) {
+	public ResponseEntity<ReplyPageDTO> getList(@PathVariable("page") int page, @PathVariable("bno") Long bno) {
 
 		Criteria cri = new Criteria(page, 10);
 		
-		log.info("get Reply List prog_num: " + prog_num);
+		log.info("get Reply List bno: " + bno);
 
 		log.info("cri:" + cri);
 
-		return new ResponseEntity<>(service.getListWithPaging(cri, prog_num), HttpStatus.OK);
+		return new ResponseEntity<>(service.getListWithPaging(cri, bno), HttpStatus.OK);
 	}
 
 }

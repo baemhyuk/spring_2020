@@ -3,61 +3,56 @@
 <mapper namespace="kr.ync.mapper.ReplyMapper">
 
 	<insert id="insert">
-		INSERT INTO tbl_reply (rno, bno, reply, replyer)
-		VALUES (seq_reply.nextval, #{bno}, #{reply}, #{replyer})
+		INSERT INTO COMMENTS (rno, prog_num, user_id, reply, rating)
+		VALUES (seq_comment_num.nextval, #{prog_num}, #{user_id}, #{reply}, #{rating})
 	</insert>
 
 	<select id="read" resultType="kr.ync.domain.ReplyVO">
-		SELECT * FROM tbl_reply WHERE rno =	#{rno}
+		SELECT * FROM COMMENTS WHERE rno = #{rno}
 	</select>
 
 	<delete id="delete">
-		DELETE FROM tbl_reply WHERE rno = #{rno}
+		DELETE FROM COMMENTS WHERE rno = #{rno}
 	</delete>
 
 	<update id="update">
-		UPDATE tbl_reply SET	reply = #{reply},
-								updatedate = sysdate 
-		WHERE rno = #{rno}
-		
-		<!-- 
-		UPDATE tbl_reply SET
-		<set>
-	      <if test="reply != null">reply=#{reply},</if>
-	    </set>
-	    updatedate = sysdate
-	    WHERE rno = #{rno}
-	    -->
+		UPDATE 	COMMENTS 
+		SET 	reply = #{reply},
+				updatedate = sysdate
+		WHERE	rno = #{rno}
+	   
 	</update>
 
 
 	<select id="getList" resultType="kr.ync.domain.ReplyVO">
 
-		select rno, bno, reply, replyer, replyDate, updatedate
-		from tbl_reply
-		where bno = #{bno}
-		order by rno DESC
+		SELECT 		rno, user_id, prog_num, replydate, reply, rating, updatedate
+		FROM 		COMMENTS
+		WHERE 		prog_num = #{prog_num}
+		ORDER BY 	rno DESC
 
 	</select>
-
+	
 	<select id="getListWithPaging" resultType="kr.ync.domain.ReplyVO">
 		<![CDATA[
 	 		SELECT	rno,
-	 				bno,
+	 				prog_num,
 	 				reply,
-	 				replyer,
+	 				user_id,
 	 				replydate,
-	 				updatedate
-	 		FROM	(SELECT /*+INDEX_DESC(tbl_reply idx_reply) */ 
+	 				updatedate,
+	 				rating
+	 		FROM	(SELECT /*+INDEX_DESC(COMMNETS XPK댓글) */ 
 	      					rownum rn,
 	      					rno,
-	      					bno,
+	      					prog_num,
 	      					reply,
-	      					replyer,
+	      					user_id,
 	      					replyDate,
-	      					updatedate
-	    			FROM	tbl_reply
-	    			WHERE	bno =  #{bno}
+	      					updatedate,
+	      					rating
+	    			FROM	COMMENTS
+	    			WHERE	prog_num =  #{prog_num}
 	    			AND		rno > 0
 	    			AND		rownum <= #{cri.pageNum} * #{cri.amount}
 	   				)
@@ -65,10 +60,10 @@
 		]]>
 	</select>
 
-	<!--<select id="getCountByBno" resultType="int">
+	<select id="getCountByBno" resultType="int">
 		<![CDATA[
-		SELECT count(rno) FROM tbl_reply WHERE bno = #{bno}
+		SELECT count(rno) FROM COMMENTS WHERE prog_num = #{prog_num}
 		]]>
-	</select>  -->
+	</select>  
 
 </mapper>

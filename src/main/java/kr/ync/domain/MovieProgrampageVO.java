@@ -18,4 +18,5 @@ public class MovieProgrampageVO {
 	private int div_num;
 	private String video;
 	private String prog_like;
+	private int replycnt;
 }
