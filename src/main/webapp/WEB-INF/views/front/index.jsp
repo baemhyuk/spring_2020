@@ -46,11 +46,7 @@
 
                             <h5 class="uk-panel-title"><c:out value="${movie_program.title}" /></h5>
                             <p>
-                            <span class="rating">
-                                    <i class="uk-icon-star"></i>
-                                    <c:out value="${movie_program.rate}" />
-                                </span>
-                                <span class="uk-float-right"><c:out value="${movie_program.year}" /></span>
+                                <span class="uk-float-left"><c:out value="${movie_program.year}" /></span>
                             </p>
                         </div>
              		</div>

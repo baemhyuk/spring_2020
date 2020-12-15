@@ -65,9 +65,10 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public ReplyPageDTO getListWithPaging(Criteria cri, int prog_num) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	   public ReplyPageDTO getListWithPaging(Criteria cri, int prog_num) {
+	  
+	      return new ReplyPageDTO(
+	            mapper.getCountByBno(prog_num), 
+	            mapper.getListWithPaging(cri, prog_num));
+	   }
 }
-

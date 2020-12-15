@@ -95,9 +95,11 @@ public class ReplyController {
 	// 해당 값 없어도 현재 브라우저는 UTF-8을 제대로 처리함.
 	// spring 5.2 부터 MediaType.APPLICATION_JSON_UTF8 로 수정하면됨
 	// 페이징 처리된 댓글 목록을 가져오는 method
-	@GetMapping(value = "/pages/{bno}/{page}", produces = { MediaType.APPLICATION_XML_VALUE,
+	@GetMapping(value = "/pages/{prog_num}/{page}", produces = { MediaType.APPLICATION_XML_VALUE,
 															MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ReplyPageDTO> getList(@PathVariable("page") int page, @PathVariable("prog_num") int prog_num) {
+	public ResponseEntity<ReplyPageDTO> getList(
+			@PathVariable("page") int page, 
+			@PathVariable("prog_num") int prog_num) {
 
 		Criteria cri = new Criteria(page, 10);
 		

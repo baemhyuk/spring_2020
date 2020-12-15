@@ -25,6 +25,7 @@
     <!--     Theme CSS   -->
     <link rel="stylesheet" href="../../../resources/front/css/theme.css">
 
+	
 </head>
 
 <body>
@@ -135,11 +136,12 @@
                         <!--     start Tab Panel 1 (Reviews Sections) -->
 
                         <li>
-                            <h2 class="uk-text-contrast uk-margin-large-top"><c:out value="${movie.title}" /><span
-                                    class="rating uk-margin-small-left uk-h4 uk-text-warning">
-                                    <i class="uk-icon-star "></i>
-                                    <c:out value="${movie.rate}" />
-                                </span></h2>
+                            <h2 class="uk-text-contrast uk-margin-large-top"><c:out value="${movie.title}" />
+	                            <span class="rating uk-margin-small-left uk-h4 uk-text-warning">
+	                               <i class="uk-icon-star "></i>
+	                               <span id="avg_rate"></span>     
+	                            </span>
+                            </h2>
                             <ul class="uk-subnav uk-subnav-line">
                                 <li><c:out value="${movie.year}" /></li>
                             </ul>
@@ -169,28 +171,14 @@
                         <li>
                             <div class="uk-margin-small-top">
                             <sec:authorize access="isAuthenticated()">
-                                <button id='addReplyBtn' class="uk-button uk-button-large uk-button-success uk-margin-top" data-toggle="modal" data-target="#myModal">Comment</button>                     
+                                <button id='addReplyBtn' class="uk-button uk-button-large uk-button-success uk-margin-top">Comment</button>                     
                             </sec:authorize>
                             </div>
 
                             <div class="uk-scrollable-box uk-responsive-width " data-simplebar-direction="vertical">
                             
                                 <ul class="chat uk-comment-list uk-margin-top">
-                                    <li>
-                                        <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                            <header class="uk-comment-header">
-                                                <img class="uk-comment-avatar uk-border-circle"
-                                                    src="../../../resources/images/avatar4.svg" width="50" height="50" alt="">
-                                                <h4 class="uk-comment-title">@user2</h4>
-                                                <div class="uk-comment-meta">2 days ago </div>
-                                            </header>
-                                            <div class="uk-comment-body">
-                                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                                                    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-                                                    erat, sed diam voluptua.</p>
-                                            </div>
-                                        </article>
-                                    </li>
+                                
                                 </ul>
                             </div>
                         </li>
@@ -224,16 +212,22 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label>Username</label> 
-						<input class="form-control" name='user_id' value='${principal.member.user_name}' readonly="readonly">
+						<label>Replyer</label> 
+						<input class="form-control" name='user_id' value='${principal.member.user_id}'>
+					</div>
+					
+					<div class="form-group">
+		                <label>Reply</label> 
+		                <input class="form-control" rows="8" name='reply' value='New Reply!!!!' >
+					</div>      
+					
+					<div class="form-group">
+						<label>Rating</label> 
+						<input name="rating">/5
 					</div>
 					<div class="form-group">
-		                <label>Comment</label> 
-		                <textarea class="form-control" name='reply' rows="8"></textarea>
-					</div>
-					<div class="form-group">
-		                <label>Rating</label> 
-		                <input>/5
+						<label>Reply Date</label> 
+						<input class="form-control" name='replyDate' value='2018-01-01'>
 					</div>
 				</div>
 				
@@ -248,7 +242,6 @@
 		</div>
         <!-- /.modal-dialog -->
 	</div>
-    <!-- ./ Main Content (Media Page Section) -->
 
 
 
@@ -319,275 +312,290 @@
     <!-- ./ Offcanvas Menu -->
 
     <!-- Include JS -->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="../../../resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../../resources/vendor/jquery/jquery.min.js"></script>
-  	<script src="../../../resources/js/reply.js"></script>
+    <script src="../../../resources/front/js/jquery.js"></script>
+	<script src="../../../resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../../resources/js/reply.js"></script>
     <script src="../../../resources/front/js/simplebar.min.js"></script>
     <script src="../../../resources/front/js/uikit.min.js"></script>
     <script src="../../../resources/front/js/components/grid.min.js"></script>
     <script src="../../../resources/front/js/components/slideset.min.js"></script>
+    
+  	
+    
   	
   	
-  	<script type="text/javascript">
-  	$(document).ready(function () {
-  	  
-  		var bnoValue = '<c:out value="${movie.prog_num}" />';
-  		var replyUL = $(".chat");
+ <script type="text/javascript">
+$(document).ready(function () {
+	  
+	var bnoValue = '<c:out value="${movie.prog_num}"/>';
+	var replyUL = $(".chat");
+	
+	showList(1);
+	
+	// 댓글 목록을 출력하는 함수
+	function showList(page){
+		
+		// console.log("show list " + page);
+	    
+		replyService.getList({prog_num:bnoValue, page: page|| 1 }, function(replyCnt, list) {
+	      
+		    // console.log("replyCnt: "+ replyCnt );
+		    // console.log("list: " + list);
+		    // console.log(list);
+	    	
+			if(page == -1){
+				pageNum = Math.ceil(replyCnt/10.0);
+				showList(pageNum);
+				return;
+			}
+ 			
+			var str="";
+	     
+			if(list == null || list.length == 0){
+				replyUL.html("");
+				return;
+			}
+	     	var rate = 0;
+			for (var i = 0, len = list.length || 0; i < len; i++) {
+					str +="<li data-rno='"+list[i].rno+"'><article class='uk-comment uk-panel uk-panel-space uk-panel-box-secondary'>";
+					str +="  <header class='uk-comment-header'><div class='header'>"
+	  					+ "<img class='uk-comment-avatar uk-border-circle' src='../../../resources/images/avatar4.svg' width='50' height='50' alt=''>"
+	  					+ " <h4 class='uk-comment-title'>"+list[i].user_id+"</h4>"; 
+					str +="    <div class='uk-comment-meta'>"
+						+ replyService.displayTime(list[i].replyDate)+"</div>"
+						+"<div class='uk-comment-meta'> ⭐" + list[i].rating + "</div>" 
+						+"</header>";
+					str +="<div class='uk-comment-body'><p>"+list[i].reply+"</p></div></div></article></li>";
 
-  		console.log(bnoValue);
-  		showList(1);
-  		
-  		// 댓글 목록을 출력하는 함수
-  		function showList(page){
-  			
-  			// console.log("show list " + page);
-  		    
-  			replyService.getList({bno:bnoValue, page: page|| 1 }, function(replyCnt, list) {
-  		      
-  			    // console.log("replyCnt: "+ replyCnt );
-  			    // console.log("list: " + list);
-  			    // console.log(list);
-  		    	
-  				if(page == -1){
-  					pageNum = Math.ceil(replyCnt/10.0);
-  					showList(pageNum);
-  					return;
-  				}
-  	 			
-  				var str="";
-  		     
-  				if(list == null || list.length == 0){
-  					replyUL.html("");
-  					return;
-  				}
-  		     
-  				for (var i = 0, len = list.length || 0; i < len; i++) {
-  					str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
-  					str +="  <div><div class='header'><strong class='primary-font'>["
-  						+ list[i].rno+"] "+list[i].user_id+"</strong>"; 
-  					str +="    <small class='pull-right text-muted'>"
-  						+ replyService.displayTime(list[i].replyDate)+"</small></div>";
-  					str +="    <p>"+list[i].reply+"</p></div></li>";
-  				}
-  		     
-  				replyUL.html(str);
-  		     
-  				showReplyPage(replyCnt);
+					rate += list[i].rating;
+				}
+			avg_rate = rate/list.length;
 
-  		 
-  			});//end function
-  		     
-  		}//end showList
+			dec_avg_rate = avg_rate.toFixed(1);
+			
+			document.getElementById("avg_rate").innerHTML = dec_avg_rate;
+			
+			replyUL.html(str);
+	     
+			showReplyPage(replyCnt);
 
-  		// 댓글 페이징 처리
-  		var pageNum = 1;
-  	    var replyPageFooter = $(".panel-footer");
-  	    
-  	    function showReplyPage(replyCnt){
-  	      
-  	      var endNum = Math.ceil(pageNum / 10.0) * 10;  
-  	      var startNum = endNum - 9; 
-  	      
-  	      var prev = startNum != 1;
-  	      var next = false;
-  	      
-  	      if(endNum * 10 >= replyCnt){
-  	        endNum = Math.ceil(replyCnt/10.0);
-  	      }
-  	      
-  	      if(endNum * 10 < replyCnt){
-  	        next = true;
-  	      }
-  	      
-  	      var str = "<ul class='pagination pull-right'>";
-  	      
-  	      if(prev){
-  	        str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
-  	      }
-  	      
-  	      for(var i = startNum ; i <= endNum; i++){
-  	        
-  	        var active = pageNum == i? "active":"";
-  	        
-  	        str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
-  	      }
-  	      
-  	      if(next){
-  	        str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
-  	      }
-  	      
-  	      str += "</ul></div>";
-  	      
-  	      console.log(str);
-  	      
-  	      replyPageFooter.html(str);
-  	    }
-  	     
-  	    replyPageFooter.on("click","li a", function(e){
-  	       e.preventDefault();
-  	       console.log("page click");
-  	       
-  	       var targetPageNum = $(this).attr("href");
-  	       
-  	       console.log("targetPageNum: " + targetPageNum);
-  	       
-  	       pageNum = targetPageNum;
-  	       
-  	       showList(pageNum);
-  	     });
-  	 	// 댓글 페이징 처리 끝
-  	 	
-  	    
-  		/* 댓글 modal 창 동작 부분*/
-  		var modal = $(".modal");
-  	    var modalInputReply = modal.find("input[name='reply']");
-  	    var modalInputReplyer = modal.find("input[name='user_id']");
-  	    var modalInputReplyDate = modal.find("input[name='replyDate']");
-  	    var modalModBtn = $("#modalModBtn");
-  	    var modalRemoveBtn = $("#modalRemoveBtn");
-  	    var modalRegisterBtn = $("#modalRegisterBtn");
+	 
+		});//end function
+	     
+	}//end showList
 
-  	 	// 댓글 인증 부분 추가
-  		var user_id = null;
-  	    
-  	    <sec:authorize access="isAuthenticated()">
-  	    	var user_id = '<sec:authentication property="principal.username"/>';   
-  		</sec:authorize>
-  	 
-  		const csrfHeaderName ="${_csrf.headerName}"; 
-  		const csrfTokenValue="${_csrf.token}";
-  	    
-  	    $("#modalCloseBtn").on("click", function(e){
-  	    	modal.modal('hide');
-  	    });
-  	    
-  	    $("#addReplyBtn").on("click", function(e){
-  			modal.find("input").val("");
-  			modal.find("input[name='user_id']").val(user_id);
-  			modalInputReplyDate.closest("div").hide();
-  			modal.find("button[id !='modalCloseBtn']").hide();
-  			
-  			modalRegisterBtn.show();
-  			$(".modal").modal("show");
-  	    });
+	// 댓글 페이징 처리
+	var pageNum = 1;
+    var replyPageFooter = $(".panel-footer");
+    
+    function showReplyPage(replyCnt){
+      
+      var endNum = Math.ceil(pageNum / 10.0) * 10;  
+      var startNum = endNum - 9; 
+      
+      var prev = startNum != 1;
+      var next = false;
+      
+      if(endNum * 10 >= replyCnt){
+        endNum = Math.ceil(replyCnt/10.0);
+      }
+      
+      if(endNum * 10 < replyCnt){
+        next = true;
+      }
+      
+      var str = "<ul class='pagination pull-right'>";
+      
+      if(prev){
+        str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
+      }
+      
+      for(var i = startNum ; i <= endNum; i++){
+        
+        var active = pageNum == i? "active":"";
+        
+        str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+      }
+      
+      if(next){
+        str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+      }
+      
+      str += "</ul></div>";
+      
+      console.log(str);
+      
+      replyPageFooter.html(str);
+    }
+     
+    replyPageFooter.on("click","li a", function(e){
+       e.preventDefault();
+       console.log("page click");
+       
+       var targetPageNum = $(this).attr("href");
+       
+       console.log("targetPageNum: " + targetPageNum);
+       
+       pageNum = targetPageNum;
+       
+       showList(pageNum);
+     });
+ 	// 댓글 페이징 처리 끝
+ 	
+    
+	/* 댓글 modal 창 동작 부분*/
+	var modal = $(".modal");
+    var modalInputReply = modal.find("input[name='reply']");
+    var modalInputReplyer = modal.find("input[name='user_id']");
+    var modalInputRating = modal.find("input[name='rating']");
+    var modalInputReplyDate = modal.find("input[name='replyDate']");
+    var modalModBtn = $("#modalModBtn");
+    var modalRemoveBtn = $("#modalRemoveBtn");
+    var modalRegisterBtn = $("#modalRegisterBtn");
 
-  	 	// Ajax Spring Security Header
-  	    $(document).ajaxSend(function(e, xhr, options) { 
-  			xhr.setRequestHeader(csrfHeaderName, csrfTokenValue); 
-  		});
-  		
-  	    // 댓글 등록
-  		modalRegisterBtn.on("click",function(e){
-  	      
-  			var reply = {
-  				reply: modalInputReply.val(),
-  				user_id:modalInputReplyer.val(),
-  	            bno:bnoValue
-  			};
-  	      
-  			replyService.add(reply, function(result){
-  	        
-  	        alert(result);
-  	        
-  	        modal.find("input").val("");
-  	        modal.modal("hide");
-  	        
-  	        showList(1);
-  	      });
-  	      
-  	    });
-  	    
-  		//댓글 조회 클릭 이벤트 처리 
-  	    $(".chat").on("click", "li", function(e){
-  	      
-  			var rno = $(this).data("rno");
-  			console.log(rno);
-  			
-  			replyService.get(rno, function(reply){
-  		
-  				modalInputReply.val(reply.reply);
-  				modalInputReplyer.val(reply.user_id);
-  				modalInputReplyDate.val(replyService.displayTime( reply.replyDate)).attr("readonly","readonly");
-  				modal.data("rno", reply.rno);
-  				
-  				modal.find("button[id !='modalCloseBtn']").hide();
-  				modalModBtn.show();
-  				modalRemoveBtn.show();
-  				
-  				$(".modal").modal("show");
-  			});
-  		});
-  		
-  	 	// 댓글 수정 이벤트. security 적용 후
-  		modalModBtn.on("click", function(e){
-  			
-  			var originalReplyer = modalInputReplyer.val();
-  			
-  			var reply = {
-  					rno:modal.data("rno"), 
-  					reply: modalInputReply.val(),
-  					user_id: originalReplyer
-  					};
-  		  
-  			if(!user_id){
-  				alert("로그인후 수정이 가능합니다.");
-  				modal.modal("hide");
-  				return;
-  			}
+ 	// 댓글 인증 부분 추가
+	var user_id = null;
+    
+    <sec:authorize access="isAuthenticated()">
+    	var user_id = '<sec:authentication property="principal.username"/>';   
+	</sec:authorize>
+ 
+	const csrfHeaderName ="${_csrf.headerName}"; 
+	const csrfTokenValue="${_csrf.token}";
+    
+    $("#modalCloseBtn").on("click", function(e){
+    	modal.modal('hide');
+    });
+    
+    $("#addReplyBtn").on("click", function(e){
+		modal.find("input").val("");
+		modal.find("input[name='user_id']").val(user_id);
+		modalInputReplyDate.closest("div").hide();
+		modal.find("button[id !='modalCloseBtn']").hide();
+		
+		modalRegisterBtn.show();
+		$(".modal").modal("show");
+    });
 
-  			console.log("Original user_id: " + originalReplyer);
-  			
-  			if(user_id  != originalReplyer){
-  				alert("자신이 작성한 댓글만 수정이 가능합니다.");
-  				modal.modal("hide");
-  				return;
-  			}
-  			  
-  			replyService.update(reply, function(result){
-  				alert(result);
-  				modal.modal("hide");
-  				showList(pageNum);
-  			});
-  		});
+ 	// Ajax Spring Security Header
+    $(document).ajaxSend(function(e, xhr, options) { 
+		xhr.setRequestHeader(csrfHeaderName, csrfTokenValue); 
+	});
+	
+    // 댓글 등록
+	modalRegisterBtn.on("click",function(e){
+      
+		var reply = {
+			reply: modalInputReply.val(),
+			user_id:modalInputReplyer.val(),
+			rating: modalInputRating.val(),
+            prog_num:bnoValue
+		};
+      
+		replyService.add(reply, function(result){
+        
+        alert(result);
+        
+        modal.find("input").val("");
+        modal.modal("hide");
+        
+        showList(1);
+      });
+      
+    });
+    
+	//댓글 조회 클릭 이벤트 처리 
+    $(".chat").on("click", "li", function(e){
+      
+		var rno = $(this).data("rno");
+		console.log(rno);
+		
+		replyService.get(rno, function(reply){
+	
+			modalInputReply.val(reply.reply);
+			modalInputReplyer.val(reply.user_id);
+			modalInputRating.val(reply.rating);
+			modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly","readonly");
+			modal.data("rno", reply.rno);
+			
+			modal.find("button[id !='modalCloseBtn']").hide();
+			modalModBtn.show();
+			modalRemoveBtn.show();
+			
+			$(".modal").modal("show");
+		});
+		
+	});
+	
+ 	// 댓글 수정 이벤트. security 적용 후
+	modalModBtn.on("click", function(e){
+		
+		var originalReplyer = modalInputReplyer.val();
+		
+		var reply = {
+				rno:modal.data("rno"), 
+				reply: modalInputReply.val(),
+				rating: modalInputRating.val(),
+				user_id: originalReplyer
+				};
+	  
+		if(!user_id){
+			alert("로그인후 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
 
-  		// 댓글 삭제 부분. security 적용 후
-  		modalRemoveBtn.on("click", function (e){
-  		  	  
-  			var rno = modal.data("rno");
+		console.log("Original user_id: " + originalReplyer);
+		
+		if(user_id  != originalReplyer){
+			alert("자신이 작성한 댓글만 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		  
+		replyService.update(reply, function(result){
+			alert(result);
+			modal.modal("hide");
+			showList(pageNum);
+		});
+	});
 
-  			console.log("RNO: " + rno);
-  			console.log("user_id: " + user_id);
-  		   	  
-  			if(!user_id){
-  				alert("로그인후 삭제가 가능합니다.");
-  				modal.modal("hide");
-  				return;
-  			}
-  		   	  
-  			var originalReplyer = modalInputReplyer.val();
-  		   	  
-  			console.log("Original user_id: " + originalReplyer);
-  		   	  
-  			if(user_id !== originalReplyer){
-  		   		  
-  				alert("자신이 작성한 댓글만 삭제가 가능합니다.");
-  				modal.modal("hide");
-  				return;
-  			}
-  		   	  
-  			replyService.remove(rno, originalReplyer, function(result){
-  		   	        
-  				alert(result);
-  				modal.modal("hide");
-  				showList(pageNum);
-  			});
-  		});
-  		
-  		/* 댓글 modal 창 동작 부분*/
-  		
-  	});
+	// 댓글 삭제 부분. security 적용 후
+	modalRemoveBtn.on("click", function (e){
+	  	  
+		var rno = modal.data("rno");
+
+		console.log("RNO: " + rno);
+		console.log("user_id: " + user_id);
+	   	  
+		if(!user_id){
+			alert("로그인후 삭제가 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+	   	  
+		var originalReplyer = modalInputReplyer.val();
+	   	  
+		console.log("Original user_id: " + originalReplyer);
+	   	  
+		if(user_id !== originalReplyer){
+	   		  
+			alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+	   	  
+		replyService.remove(rno, originalReplyer, function(result){
+	   	        
+			alert(result);
+			modal.modal("hide");
+			showList(pageNum);
+		});
+	});
+	
+	/* 댓글 modal 창 동작 부분*/
+	
+});
 </script>
 
 </body>
