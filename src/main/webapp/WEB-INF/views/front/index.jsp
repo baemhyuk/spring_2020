@@ -10,12 +10,6 @@
                 <li class="uk-active"><a href="index">Movies</a></li>
                 <li><a href="Tvshow">TV Shows</a></li>
             </ul>
-            <div class="uk-navbar-flip">
-                <form class="uk-search uk-margin-small-top uk-margin-left uk-hidden-small">
-                    <input class="uk-search-field" type="search" placeholder="Search..." autocomplete="off">
-                    <div class="uk-dropdown uk-dropdown-flip uk-dropdown-search" aria-expanded="false"></div>
-                </form>
-            </div>
         </div>
     </nav>
 

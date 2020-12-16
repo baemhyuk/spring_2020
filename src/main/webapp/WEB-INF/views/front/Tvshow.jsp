@@ -8,12 +8,6 @@
                 <li ><a href="index">Movies</a></li>
                 <li class="uk-active"><a href="Tvshow">TV Shows</a></li>
             </ul>
-            <div class="uk-navbar-flip">
-                <form class="uk-search uk-margin-small-top uk-margin-left uk-hidden-small">
-                    <input class="uk-search-field" type="search" placeholder="Search..." autocomplete="off">
-                    <div class="uk-dropdown uk-dropdown-flip uk-dropdown-search" aria-expanded="false"></div>
-                </form>
-            </div>
         </div>
     </nav>
 
@@ -44,14 +38,7 @@
 
                             <h5 class="uk-panel-title"><c:out value="${tv_program.title}" /></h5>
                             <p>
-                            <span class="rating">
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                    <i class="uk-icon-star"></i>
-                                </span>
-                                <span class="uk-float-right"><c:out value="${tv_program.year}" /></span>
+                              <span class="uk-float-left"><c:out value="${tv_program.year}" /></span>
                             </p>
                         </div>
              		</div>
