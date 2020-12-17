@@ -68,7 +68,7 @@ public class AdminProgramPageController {
 
 		log.info("admin_movie: " + cri);
 		
-		// 게시판의 글은 지속적으로 등록, 삭제 되기에 매번 list를 호출 할때 total을 구해와야 한다. 
+		
 		int total = service.getTotal_movie(cri);
 		log.info("total: " + total);
 		model.addAttribute("admin_movie", service.getListWithPaging_index(cri));
@@ -82,7 +82,7 @@ public class AdminProgramPageController {
 
 		log.info("admin_tv: " + cri);
 		
-		// 게시판의 글은 지속적으로 등록, 삭제 되기에 매번 list를 호출 할때 total을 구해와야 한다. 
+		
 		int total = service.getTotal_tv(cri);
 		log.info("total: " + total);
 		model.addAttribute("admin_tv", service.getListWithPaging_tvshow(cri));

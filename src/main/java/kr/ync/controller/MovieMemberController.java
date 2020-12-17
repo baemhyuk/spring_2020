@@ -27,20 +27,7 @@ public class MovieMemberController {
 	public void signup() {
 
 	}
-	
-//	@GetMapping("/login")
-//	public void login(String error, String logout, Model model) {
-//		log.info("error: " + error);
-//		log.info("logout: " + logout);
-//
-//		if (error != null) {
-//			model.addAttribute("error", "Login Error Check Your Account");
-//		}
-//
-//		if (logout != null) {
-//			model.addAttribute("logout", "Logout!!");
-//		}
-//	}
+
 	
 	@PostMapping("/signup")
 	public String register(MovieMemberVO moviemember, Model model) {
