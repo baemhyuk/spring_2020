@@ -202,8 +202,8 @@ $(document).ready(function () {
 				str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
 				str +="  <div><div class='header'><strong class='primary-font'>["
 					+ list[i].rno+"] "+list[i].rno+"</strong>"; 
-				str +="    <small class='pull-right text-muted'>"
-					+ replyService.displayTime(list[i].replyDate)+"</small></div>";
+				str +="    <div class='pull-right text-muted'>"
+					+ replyService.displayTime(list[i].replyDate)+"</div></div>";
 				str +="    <p>"+list[i].reply+"</p></div></li>";
 			}
 	     

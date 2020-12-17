@@ -227,7 +227,7 @@
 					</div>
 					<div class="form-group">
 						<label>Reply Date</label> 
-						<input class="form-control" name='replyDate' value='2018-01-01'>
+						<input class="form-control" name='replydate' value=''>
 					</div>
 				</div>
 				
@@ -358,12 +358,12 @@ $(document).ready(function () {
 	     	var rate = 0;
 			for (var i = 0, len = list.length || 0; i < len; i++) {
 					str +="<li data-rno='"+list[i].rno+"'><article class='uk-comment uk-panel uk-panel-space uk-panel-box-secondary'>";
-					str +="  <header class='uk-comment-header'><div class='header'>"
+					str +="<header class='uk-comment-header'><div class='header'>"
 	  					+ "<img class='uk-comment-avatar uk-border-circle' src='../../../resources/images/avatar4.svg' width='50' height='50' alt=''>"
-	  					+ " <h4 class='uk-comment-title'>"+list[i].user_id+"</h4>"; 
-					str +="    <div class='uk-comment-meta'>"
-						+ replyService.displayTime(list[i].replyDate)+"</div>"
-						+"<div class='uk-comment-meta'> ⭐" + list[i].rating + "</div>" 
+	  					+ "<h4 class='uk-comment-title'>"+list[i].user_id+"</h4>";
+					str +="<div class='uk-comment-meta'>"
+						+replyService.displayTime(list[i].replydate)+"</div>"
+						+"<div class='uk-comment-meta'> ⭐" + list[i].rating + "</div>"
 						+"</header>";
 					str +="<div class='uk-comment-body'><p>"+list[i].reply+"</p></div></div></article></li>";
 
@@ -448,7 +448,7 @@ $(document).ready(function () {
     var modalInputReply = modal.find("input[name='reply']");
     var modalInputReplyer = modal.find("input[name='user_id']");
     var modalInputRating = modal.find("input[name='rating']");
-    var modalInputReplyDate = modal.find("input[name='replyDate']");
+    var modalInputReplyDate = modal.find("input[name='replydate']");
     var modalModBtn = $("#modalModBtn");
     var modalRemoveBtn = $("#modalRemoveBtn");
     var modalRegisterBtn = $("#modalRegisterBtn");
@@ -515,7 +515,7 @@ $(document).ready(function () {
 			modalInputReply.val(reply.reply);
 			modalInputReplyer.val(reply.user_id);
 			modalInputRating.val(reply.rating);
-			modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly","readonly");
+			modalInputReplyDate.val(replyService.displayTime(reply.replydate)).attr("readonly","readonly");
 			modal.data("rno", reply.rno);
 			
 			modal.find("button[id !='modalCloseBtn']").hide();
