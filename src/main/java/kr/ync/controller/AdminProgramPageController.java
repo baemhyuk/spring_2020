@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.ync.domain.BoardVO;
 import kr.ync.domain.Criteria;
 import kr.ync.domain.MovieProgrampageVO;
 import kr.ync.domain.PageDTO;

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import kr.ync.domain.Criteria;
 import kr.ync.domain.MovieMemberVO;
-import kr.ync.mapper.BoardMapper;
 import kr.ync.mapper.MovieMemberMapper;
 import lombok.extern.log4j.Log4j;
 

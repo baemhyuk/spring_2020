@@ -112,8 +112,6 @@
                     <div class="media-cover">
                         <img src="<c:out value="${tv.poster}" />" alt="Image" class="uk-scrollspy-inview uk-animation-fade">
                     </div>
-                    <a class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"
-                        href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
                 </div>
                 <div class="uk-width-medium-7-10">
                     <div class="">
